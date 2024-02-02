@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script type="module">
+      import { Point, QBezier } from "../../path/geometry.ts";
+      /**
+       * @type HTMLCanvasElement
+       */
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const qbezier = new QBezier(
+        new Point(100, 250),
+        new Point(250, 100),
+        new Point(400, 250)
+      );
+      ctx.moveTo(qbezier.s.x, qbezier.s.y);
+      ctx.quadraticCurveTo(qbezier.c.x, qbezier.c.y, qbezier.e.x, qbezier.e.y);
+      ctx.stroke();
+    </script>
+    <style>
+      :root,
+      body {
+        margin: 0;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </body>
+</html>
