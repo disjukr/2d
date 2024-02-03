@@ -1,0 +1,63 @@
+<html>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <input id="input" type="range" value="1" min="-2" max="10" step="0.01" />
+    <script type="module">
+      import { Point, Conic } from "../../path/geometry.ts";
+      import { conic } from "../../interpolation.ts";
+      /**
+       * @type HTMLCanvasElement
+       */
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      /**
+       * @type HTMLInputElement
+       */
+      const input = document.getElementById("input");
+
+      const curve = new Conic(
+        new Point(100, 250),
+        new Point(250, 100),
+        new Point(400, 250),
+        1
+      );
+
+      input.oninput = () => {
+        curve.w = Number(input.value);
+        draw();
+      };
+      draw();
+
+      function draw() {
+        ctx.reset();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "black";
+        ctx.moveTo(curve.s.x, curve.s.y);
+        ctx.quadraticCurveTo(curve.c.x, curve.c.y, curve.e.x, curve.e.y);
+        ctx.stroke();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.moveTo(curve.s.x, curve.s.y);
+        for (let i = 0; i < 20; ++i) {
+          const t = i / 19;
+          const { s, c, e, w } = curve;
+          const x = conic(s.x, c.x, e.x, w, t);
+          const y = conic(s.y, c.y, e.y, w, t);
+          ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    </script>
+    <style>
+      :root,
+      body {
+        margin: 0;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </body>
+</html>

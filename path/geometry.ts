@@ -10,7 +10,7 @@ export class QBezier {
   constructor(public s: Point, public c: Point, public e: Point) {}
 }
 
-export class RQBezier {
+export class Conic {
   constructor(
     public s: Point,
     public c: Point,
@@ -30,7 +30,7 @@ export class CBezier {
 
 export class Contour {
   constructor(
-    public d: (Line | QBezier | RQBezier | CBezier)[],
+    public d: (Line | QBezier | Conic | CBezier)[],
     public z: boolean,
   ) {}
 }

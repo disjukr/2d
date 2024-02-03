@@ -8,13 +8,13 @@
        */
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
-      const qbezier = new QBezier(
+      const curve = new QBezier(
         new Point(100, 250),
         new Point(250, 100),
         new Point(400, 250)
       );
-      ctx.moveTo(qbezier.s.x, qbezier.s.y);
-      ctx.quadraticCurveTo(qbezier.c.x, qbezier.c.y, qbezier.e.x, qbezier.e.y);
+      ctx.moveTo(curve.s.x, curve.s.y);
+      ctx.quadraticCurveTo(curve.c.x, curve.c.y, curve.e.x, curve.e.y);
       ctx.stroke();
     </script>
     <style>

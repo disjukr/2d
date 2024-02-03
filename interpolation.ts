@@ -8,6 +8,23 @@ export function qbezier(s: number, c: number, e: number, t: number): number {
   return lerp(a, b, t);
 }
 
+export function conic(
+  s: number,
+  c: number,
+  e: number,
+  w: number,
+  t: number,
+): number {
+  const t2 = t + t;
+  const tt = t * t;
+  const ot = 1 - t;
+  const otot = ot * ot;
+  const t2otw = t2 * ot * w;
+  const m = otot * s + t2otw * c + tt * e;
+  const d = otot + t2otw + tt;
+  return m / d;
+}
+
 export function cbezier(
   s: number,
   c1: number,
