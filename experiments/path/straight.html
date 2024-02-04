@@ -1,0 +1,58 @@
+<html>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <input id="input1" type="range" value="0.3" min="-1" max="2" step="0.01" />
+    <input id="input2" type="range" value="0.6" min="-1" max="2" step="0.01" />
+    <script type="module">
+      import { Point, Straight } from "../../path/geometry.ts";
+      /**
+       * @type HTMLCanvasElement
+       */
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      /**
+       * @type HTMLInputElement
+       */
+      const input1 = document.getElementById("input1");
+      /**
+       * @type HTMLInputElement
+       */
+      const input2 = document.getElementById("input2");
+
+      const line = new Straight(new Point(100, 250), new Point(400, 250));
+
+      input1.oninput = input2.oninput = draw;
+      draw();
+
+      function draw() {
+        const slicedLine = line.slice(
+          Number(input1.value),
+          Number(input2.value)
+        );
+        console.log(Number(input1.value), Number(input2.value));
+        ctx.reset();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "black";
+        ctx.moveTo(line.s.x, line.s.y);
+        ctx.lineTo(line.e.x, line.e.y);
+        ctx.stroke();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.moveTo(slicedLine.s.x, slicedLine.s.y);
+        ctx.lineTo(slicedLine.e.x, slicedLine.e.y);
+        ctx.stroke();
+      }
+    </script>
+    <style>
+      :root,
+      body {
+        margin: 0;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </body>
+</html>
