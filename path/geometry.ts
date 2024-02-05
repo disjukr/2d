@@ -1,4 +1,4 @@
-import { lerp } from "../interpolation.ts";
+import { lerp, qbezier } from "../interpolation.ts";
 
 export class Point {
   constructor(public x: number, public y: number) {}
@@ -7,8 +7,13 @@ export class Point {
 export abstract class Line {
   abstract slice(t1: number, t2: number): Line;
   // get length
+  // chopAt t
   // pointAt t
   // tangetAt t
+}
+
+export class LinePair {
+  constructor(public l1: Line, public l2: Line) {}
 }
 
 export class Straight extends Line {
@@ -46,7 +51,23 @@ export class QBezier extends Line {
     super();
   }
   slice(t1: number, t2: number): QBezier {
-    throw "todo";
+    if (t1 === 0 && t2 === 1) return this;
+    const sx = this.s.x;
+    const sy = this.s.y;
+    const cx = this.c.x;
+    const cy = this.c.y;
+    const ex = this.e.x;
+    const ey = this.e.y;
+    const t3 = (t1 + t2) / 2;
+    const px = qbezier(sx, cx, ex, t3);
+    const py = qbezier(sy, cy, ey, t3);
+    const s = new Point(qbezier(sx, cx, ex, t1), qbezier(sy, cy, ey, t1));
+    const e = new Point(qbezier(sx, cx, ex, t2), qbezier(sy, cy, ey, t2));
+    const c = new Point(
+      (px + px) - (s.x + e.x) / 2,
+      (py + py) - (s.y + e.y) / 2,
+    );
+    return new QBezier(s, c, e);
   }
 }
 
@@ -60,6 +81,7 @@ export class Conic extends Line {
     super();
   }
   slice(t1: number, t2: number): Conic {
+    if (t1 === 0 && t2 === 1) return this;
     throw "todo";
   }
 }
@@ -74,6 +96,7 @@ export class CBezier extends Line {
     super();
   }
   slice(t1: number, t2: number): CBezier {
+    if (t1 === 0 && t2 === 1) return this;
     throw "todo";
   }
 }
