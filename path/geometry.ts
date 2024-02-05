@@ -1,4 +1,4 @@
-import { lerp, qbezier } from "../interpolation.ts";
+import { cbezier, lerp, qbezier } from "../interpolation.ts";
 
 export class Point {
   constructor(public x: number, public y: number) {}
@@ -97,7 +97,41 @@ export class CBezier extends Line {
   }
   slice(t1: number, t2: number): CBezier {
     if (t1 === 0 && t2 === 1) return this;
-    throw "todo";
+    const sx = this.s.x;
+    const sy = this.s.y;
+    const c1x = this.c1.x;
+    const c1y = this.c1.y;
+    const c2x = this.c2.x;
+    const c2y = this.c2.y;
+    const ex = this.e.x;
+    const ey = this.e.y;
+    const t3 = (t1 + t1 + t2) / 3;
+    const t4 = (t1 + t2 + t2) / 3;
+    const s = new Point(
+      cbezier(sx, c1x, c2x, ex, t1),
+      cbezier(sy, c1y, c2y, ey, t1),
+    );
+    const e = new Point(
+      cbezier(sx, c1x, c2x, ex, t2),
+      cbezier(sy, c1y, c2y, ey, t2),
+    );
+    const p1x = cbezier(sx, c1x, c2x, ex, t3);
+    const p1y = cbezier(sy, c1y, c2y, ey, t3);
+    const p2x = cbezier(sx, c1x, c2x, ex, t4);
+    const p2y = cbezier(sy, c1y, c2y, ey, t4);
+    const p3x = p1x * 27 - s.x * 8 - e.x;
+    const p3y = p1y * 27 - s.y * 8 - e.y;
+    const p4x = p2x * 27 - s.x - e.x * 8;
+    const p4y = p2y * 27 - s.y - e.y * 8;
+    const c1 = new Point(
+      (p3x + p3x - p4x) / 18,
+      (p3y + p3y - p4y) / 18,
+    );
+    const c2 = new Point(
+      (p4x + p4x - p3x) / 18,
+      (p4y + p4y - p3y) / 18,
+    );
+    return new CBezier(s, c1, c2, e);
   }
 }
 
