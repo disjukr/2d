@@ -20,9 +20,9 @@ export function conic(
   const ot = 1 - t;
   const otot = ot * ot;
   const t2otw = t2 * ot * w;
-  const m = otot * s + t2otw * c + tt * e;
+  const n = otot * s + t2otw * c + tt * e;
   const d = otot + t2otw + tt;
-  return m / d;
+  return n / d;
 }
 
 export function cbezier(

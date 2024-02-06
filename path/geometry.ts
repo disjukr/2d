@@ -82,7 +82,52 @@ export class Conic extends Line {
   }
   slice(t1: number, t2: number): Conic {
     if (t1 === 0 && t2 === 1) return this;
-    throw "todo";
+    const sx = this.s.x;
+    const sy = this.s.y;
+    const cx = this.c.x;
+    const cy = this.c.y;
+    const ex = this.e.x;
+    const ey = this.e.y;
+    const w = this.w;
+    const t3 = (t1 + t2) / 2;
+    const sd = Conic.d(w, t1);
+    const ed = Conic.d(w, t2);
+    const pd = Conic.d(w, t3);
+    const cd = ((pd + pd) - (sd + ed) / 2) || 1;
+    const snx = Conic.n(sx, cx, ex, w, t1);
+    const sny = Conic.n(sy, cy, ey, w, t1);
+    const enx = Conic.n(sx, cx, ex, w, t2);
+    const eny = Conic.n(sy, cy, ey, w, t2);
+    const pnx = Conic.n(sx, cx, ex, w, t3);
+    const pny = Conic.n(sy, cy, ey, w, t3);
+    const cnx = (pnx + pnx) - (snx + enx) / 2;
+    const cny = (pny + pny) - (sny + eny) / 2;
+    const s = new Point(snx / sd, sny / sd);
+    const e = new Point(enx / ed, eny / ed);
+    const c = new Point(cnx / cd, cny / cd);
+    return new Conic(s, c, e, cd / Math.sqrt(sd * ed));
+  }
+  private static n(
+    s: number,
+    c: number,
+    e: number,
+    w: number,
+    t: number,
+  ): number {
+    const t2 = t + t;
+    const tt = t * t;
+    const ot = 1 - t;
+    const otot = ot * ot;
+    const t2otw = t2 * ot * w;
+    return otot * s + t2otw * c + tt * e;
+  }
+  private static d(w: number, t: number) {
+    const t2 = t + t;
+    const tt = t * t;
+    const ot = 1 - t;
+    const otot = ot * ot;
+    const t2otw = t2 * ot * w;
+    return otot + t2otw + tt;
   }
 }
 
