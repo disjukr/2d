@@ -6,7 +6,12 @@ export class Point {
 
 export abstract class Line {
   abstract slice(t1: number, t2: number): Line;
+  // get minX
+  // get minY
+  // get maxX
+  // get maxY
   // get length
+  // lengthToT length
   // chopAt t
   // pointAt t
   // tangetAt t
@@ -44,6 +49,9 @@ export class Straight extends Line {
     );
   }
   // intersectWithStraight line
+  // intersectWithQBezier line
+  // intersectWithConic line
+  // intersectWithCBezier line
 }
 
 export class QBezier extends Line {
@@ -69,6 +77,10 @@ export class QBezier extends Line {
     );
     return new QBezier(s, c, e);
   }
+  // intersectWithStraight line
+  // intersectWithQBezier line
+  // intersectWithConic line
+  // intersectWithCBezier line
 }
 
 export class Conic extends Line {
@@ -129,6 +141,10 @@ export class Conic extends Line {
     const t2otw = t2 * ot * w;
     return otot + t2otw + tt;
   }
+  // intersectWithStraight line
+  // intersectWithQBezier line
+  // intersectWithConic line
+  // intersectWithCBezier line
 }
 
 export class CBezier extends Line {
@@ -178,6 +194,12 @@ export class CBezier extends Line {
     );
     return new CBezier(s, c1, c2, e);
   }
+  // get isSelfIntersecting
+  // get selfIntersectingT
+  // intersectWithStraight line
+  // intersectWithQBezier line
+  // intersectWithConic line
+  // intersectWithCBezier line
 }
 
 export class Contour {
