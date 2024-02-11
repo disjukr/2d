@@ -1,8 +1,5 @@
 import { cbezier, lerp, qbezier } from "../interpolation.ts";
-
-export class Point {
-  constructor(public x: number, public y: number) {}
-}
+import { Point } from "../geometry.ts";
 
 export abstract class Line {
   abstract slice(t1: number, t2: number): Line;
@@ -48,6 +45,7 @@ export class Straight extends Line {
       new Point(lerp(sx, ex, t2), lerp(sy, ey, t2)),
     );
   }
+  // elevateToQBezier
   // intersectWithStraight line
   // intersectWithQBezier line
   // intersectWithConic line
@@ -77,6 +75,7 @@ export class QBezier extends Line {
     );
     return new QBezier(s, c, e);
   }
+  // elevateToCBezier
   // intersectWithStraight line
   // intersectWithQBezier line
   // intersectWithConic line
