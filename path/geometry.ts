@@ -1,5 +1,6 @@
 import { cbezier, dcbezier, lerp, qbezier } from "../interpolation.ts";
 import { Point } from "../geometry.ts";
+import integrate from "../numerical/integrate.ts";
 
 export abstract class Line {
   abstract slice(t1: number, t2: number): Line;
@@ -9,6 +10,7 @@ export abstract class Line {
   // get maxY
   // get length
   // lengthToT length
+  // lengthAt t
   // chopAt t
   // pointAt t
   // tangentAt t
@@ -44,6 +46,20 @@ export class Straight extends Line {
       new Point(lerp(sx, ex, t1), lerp(sy, ey, t1)),
       new Point(lerp(sx, ex, t2), lerp(sy, ey, t2)),
     );
+  }
+  get length() {
+    const dx = this.e.x - this.s.x;
+    const dy = this.e.y - this.s.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  lengthAt(t: number): number {
+    return this.length * t;
+  }
+  pointAt(t: number): Point {
+    return new Point(lerp(this.s.x, this.e.x, t), lerp(this.s.y, this.e.y, t));
+  }
+  tangentAt(): Point {
+    return new Point(this.e.x - this.s.x, this.e.y - this.s.y);
   }
   // elevateToQBezier
   // intersectWithStraight line
@@ -192,6 +208,12 @@ export class CBezier extends Line {
       (p4y + p4y - p3y) / 18,
     );
     return new CBezier(s, c1, c2, e);
+  }
+  get length() {
+    return integrate((t) => this.tangentAt(t).norm(), 0, 1);
+  }
+  lengthAt(t: number): number {
+    return integrate((t) => this.tangentAt(t).norm(), 0, t);
   }
   pointAt(t: number): Point {
     return new Point(
