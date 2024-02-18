@@ -1,4 +1,4 @@
-import { cbezier, lerp, qbezier } from "../interpolation.ts";
+import { cbezier, dcbezier, lerp, qbezier } from "../interpolation.ts";
 import { Point } from "../geometry.ts";
 
 export abstract class Line {
@@ -11,7 +11,7 @@ export abstract class Line {
   // lengthToT length
   // chopAt t
   // pointAt t
-  // tangetAt t
+  // tangentAt t
 }
 
 export class LinePair {
@@ -192,6 +192,18 @@ export class CBezier extends Line {
       (p4y + p4y - p3y) / 18,
     );
     return new CBezier(s, c1, c2, e);
+  }
+  pointAt(t: number): Point {
+    return new Point(
+      cbezier(this.s.x, this.c1.x, this.c2.x, this.e.x, t),
+      cbezier(this.s.y, this.c1.y, this.c2.y, this.e.y, t),
+    );
+  }
+  tangentAt(t: number): Point {
+    return new Point(
+      dcbezier(this.s.x, this.c1.x, this.c2.x, this.e.x, t),
+      dcbezier(this.s.y, this.c1.y, this.c2.y, this.e.y, t),
+    );
   }
   // get isSelfIntersecting
   // get selfIntersectingT

@@ -39,3 +39,16 @@ export function cbezier(
   const bb = lerp(b, c, t);
   return lerp(aa, bb, t);
 }
+
+export function dcbezier(
+  s: number,
+  c1: number,
+  c2: number,
+  e: number,
+  t: number,
+) {
+  const ot = 1 - t;
+  return 3 * (ot * ot) * (c1 - s) +
+    6 * ot * t * (c2 - c1) +
+    3 * t * t * (e - c2);
+}
