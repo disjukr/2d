@@ -1,4 +1,10 @@
-import { cbezier, dcbezier, lerp, qbezier } from "../interpolation.ts";
+import {
+  cbezier,
+  dcbezier,
+  dqbezier,
+  lerp,
+  qbezier,
+} from "../interpolation.ts";
 import { Point } from "../geometry.ts";
 import integrate from "../numerical/integrate.ts";
 
@@ -90,6 +96,24 @@ export class QBezier extends Line {
       (py + py) - (s.y + e.y) / 2,
     );
     return new QBezier(s, c, e);
+  }
+  get length() {
+    return integrate((t) => this.tangentAt(t).norm(), 0, 1);
+  }
+  lengthAt(t: number): number {
+    return integrate((t) => this.tangentAt(t).norm(), 0, t);
+  }
+  pointAt(t: number): Point {
+    return new Point(
+      qbezier(this.s.x, this.c.x, this.e.x, t),
+      qbezier(this.s.y, this.c.y, this.e.y, t),
+    );
+  }
+  tangentAt(t: number): Point {
+    return new Point(
+      dqbezier(this.s.x, this.c.x, this.e.x, t),
+      dqbezier(this.s.y, this.c.y, this.e.y, t),
+    );
   }
   // elevateToCBezier
   // intersectWithStraight line

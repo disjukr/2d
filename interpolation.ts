@@ -8,6 +8,11 @@ export function qbezier(s: number, c: number, e: number, t: number): number {
   return lerp(a, b, t);
 }
 
+export function dqbezier(s: number, c: number, e: number, t: number): number {
+  return 2 * (1 - t) * (c - s) +
+    2 * t * (e - c);
+}
+
 export function conic(
   s: number,
   c: number,

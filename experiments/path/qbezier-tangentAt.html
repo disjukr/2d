@@ -1,0 +1,55 @@
+<html>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <input id="input" type="range" value="0.3" min="-1" max="2" step="0.01" />
+    <script type="module">
+      import { Point } from "../../geometry.ts";
+      import { QBezier } from "../../path/geometry.ts";
+      /**
+       * @type HTMLCanvasElement
+       */
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      /**
+       * @type HTMLInputElement
+       */
+      const input = document.getElementById("input");
+
+      const line = new QBezier(
+        new Point(100, 250),
+        new Point(250, 100),
+        new Point(400, 250)
+      );
+
+      input.oninput = draw;
+      draw();
+
+      function draw() {
+        const point = line.pointAt(Number(input.value));
+        const tangent = line.tangentAt(Number(input.value));
+        ctx.reset();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.moveTo(line.s.x, line.s.y);
+        ctx.quadraticCurveTo(line.c.x, line.c.y, line.e.x, line.e.y);
+        ctx.stroke();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.moveTo(point.x, point.y);
+        ctx.lineTo(point.x + tangent.x, point.y + tangent.y);
+        ctx.stroke();
+      }
+    </script>
+    <style>
+      :root,
+      body {
+        margin: 0;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </body>
+</html>
