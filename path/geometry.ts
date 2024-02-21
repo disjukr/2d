@@ -16,12 +16,12 @@ export abstract class Line {
   // get minY
   // get maxX
   // get maxY
-  // get length
-  // lengthToT length
-  // lengthAt t
+  abstract get length(): number;
+  // lengthToT(length: number): number;
+  abstract lengthAt(t: number): number;
   // chopAt t
-  // pointAt t
-  // tangentAt t
+  abstract pointAt(t: number): Point;
+  abstract tangentAt(t: number): Point;
 }
 
 export class LinePair {
