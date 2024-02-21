@@ -1,6 +1,8 @@
 import {
   cbezier,
+  conic,
   dcbezier,
+  dconic,
   dqbezier,
   lerp,
   qbezier,
@@ -179,6 +181,24 @@ export class Conic extends Line {
     const otot = ot * ot;
     const t2otw = t2 * ot * w;
     return otot + t2otw + tt;
+  }
+  get length() {
+    return integrate((t) => this.tangentAt(t).norm(), 0, 1);
+  }
+  lengthAt(t: number): number {
+    return integrate((t) => this.tangentAt(t).norm(), 0, t);
+  }
+  pointAt(t: number): Point {
+    return new Point(
+      conic(this.s.x, this.c.x, this.e.x, this.w, t),
+      conic(this.s.y, this.c.y, this.e.y, this.w, t),
+    );
+  }
+  tangentAt(t: number): Point {
+    return new Point(
+      dconic(this.s.x, this.c.x, this.e.x, this.w, t),
+      dconic(this.s.y, this.c.y, this.e.y, this.w, t),
+    );
   }
   // intersectWithStraight line
   // intersectWithQBezier line

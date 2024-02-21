@@ -30,6 +30,18 @@ export function conic(
   return n / d;
 }
 
+export function dconic(
+  s: number,
+  c: number,
+  e: number,
+  w: number,
+  t: number,
+): number {
+  const d = e - s;
+  const p = w * (c - s);
+  return t * ((t * ((w * d) - d)) + (d - (p + p))) + p;
+}
+
 export function cbezier(
   s: number,
   c1: number,
